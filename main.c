@@ -20,7 +20,7 @@ int main() {
         printf("3 - Remover notícia verificada por palavra-chave\n");
         printf("4 - Buscar noticias pendentes por palavra-chave\n");
         printf("5 - Imprimir as noticias\n");
-        printf("6 - Classificar notícias");
+        printf("6 - Classificar notícias\n");
         printf("7 - Imprimir quantidade de notícias por categoria\n");
         printf ("8 - Sair\n");
         printf("Escolha uma opção: \n");
