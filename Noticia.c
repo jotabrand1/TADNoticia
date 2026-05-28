@@ -5,7 +5,7 @@
 
 
 Noticia* criarNoticia(){
-    static int gerenciadorId = 1;
+    static int gerenciadorId = 1; 
     Noticia* noticia = (Noticia*)malloc(sizeof(Noticia));
     
     if(noticia != NULL){
@@ -62,7 +62,7 @@ void imprimirNoticia(Noticia*noticia){
         printf("\n");
 
 
-        printf("Classificação da noticia:" );
+        printf("Classificacao da noticia:" );
 
         switch (noticia->clasf)
         {
