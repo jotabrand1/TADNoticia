@@ -18,6 +18,8 @@ typedef struct noticia {
     Classificacao clasf;
 } Noticia;
 
+
+
 Noticia* criarNoticia();
 void imprimirNoticia(Noticia* noticia);
 void liberarNoticia(Noticia**noticia);
