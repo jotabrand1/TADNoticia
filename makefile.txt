@@ -1,19 +1,53 @@
-all: compila
+
+# ============================================================
+# Makefile — Sistema de Noticias
+# Compativel com Linux, WSL e Windows (PowerShell/CMD)
+# Uso:
+#   make        → compila o projeto
+#   make clean  → remove arquivos gerados
+#   make run    → compila e executa
+# ============================================================
  
-compila: main.o Noticia.o ListaCabCau.o ListaEncadeada.o
-	gcc main.o Noticia.o ListaCabCau.o ListaEncadeada.o -o prog
+CC     = gcc
+TARGET = prog
+SRCS   = main.c Noticia.c ListaCabCau.c ListaEncadeada.c
+OBJS   = $(SRCS:.c=.o)
  
-main.o: main.c
-	gcc -c main.c
+# Detecta o sistema operacional
+ifeq ($(OS), Windows_NT)
+	RM     = del /Q
+	EXEC   = $(TARGET).exe
+else
+	RM     = rm -f
+	EXEC   = ./$(TARGET)
+endif
  
-Noticia.o: Noticia.c
-	gcc -c Noticia.c
+# Regra padrão
+all: $(TARGET)
  
-ListaCabCau.o: ListaCabCau.c
-	gcc -c ListaCabCau.c
+# Linka os .o e gera o executável
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $(TARGET)
  
-ListaEncadeada.o: ListaEncadeada.c
-	gcc -c ListaEncadeada.c
+# Compila cada .c em .o
+main.o: main.c Noticia.h ListaCabCau.h ListaEncadeada.h
+	$(CC) -c main.c
  
+Noticia.o: Noticia.c Noticia.h
+	$(CC) -c Noticia.c
+ 
+ListaCabCau.o: ListaCabCau.c ListaCabCau.h Noticia.h
+	$(CC) -c ListaCabCau.c
+ 
+ListaEncadeada.o: ListaEncadeada.c ListaEncadeada.h Noticia.h
+	$(CC) -c ListaEncadeada.c
+ 
+# Executa o programa
+run: $(TARGET)
+	$(EXEC)
+ 
+# Remove arquivos gerados
 clean:
-	rm -f main.o Noticia.o ListaCabCau.o ListaEncadeada.o prog
+	$(RM) $(OBJS) $(TARGET) $(TARGET).exe
+ 
+.PHONY: all run clean
