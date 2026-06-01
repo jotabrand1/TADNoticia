@@ -3,96 +3,84 @@
 #include <string.h>
 #include "Noticia.h"
 
+/*
+ * criarNoticia
+ * Aloca e preenche uma nova notícia via entrada do usuário.
+ * A classificação inicial é sempre EM_ANALISE (notícias recém-cadastradas
+ * ficam na fila de pendentes e serão classificadas depois pela opção 6).
+ * Retorna ponteiro para a notícia alocada, ou NULL em caso de falha.
+ */
+Noticia* criarNoticia() {
+    static int gerenciadorId = 1; /* Contador de ID único, incrementado a cada criação */
 
-Noticia* criarNoticia(){
-    static int gerenciadorId = 1; 
-    Noticia* noticia = (Noticia*)malloc(sizeof(Noticia));
-    
-    if(noticia != NULL){
+    Noticia* noticia = (Noticia*) malloc(sizeof(Noticia));
 
-        
-        noticia->id = gerenciadorId++;
-        printf("Noticia criada automaticamente com o ID: %d\n", noticia->id);
-
-        printf("Digite a data da noticia (DD/MM/AAAA): ");
-        scanf("%10s", noticia->data);
-
-        
-    
-        printf("Digite o titulo da noticia: ");
-        scanf(" %999[^\n]", noticia->titulo);
-
-        
-
-        printf("Digite o conteudo da noticia: ");
-        scanf(" %999[^\n]", noticia->conteudo); 
-
-       
-
-        printf("Digite a fonte da noticia: ");
-        scanf(" %999[^\n]", noticia->fonte);
-
-        
-        int opcao;
-        printf("Digite a classificacao da noticia (1 - EmAnalise, 2 - Confiavel, 3 - Suspeita): ");
-        scanf("%d", &opcao);
-        noticia->clasf = opcao;
-
-
-
-        return noticia;
-    }else{
-        printf("Nao foi possivel alocar espaço na memoria");
+    if (noticia == NULL) {
+        printf("Erro: nao foi possivel alocar espaco na memoria.\n");
+        return NULL; /* Retorno explícito em caso de falha — corrige ausência anterior */
     }
-    
 
+    /* ID gerado automaticamente pelo programa */
+    noticia->id = gerenciadorId++;
+    printf("Noticia criada com ID: %d\n", noticia->id);
+
+    printf("Digite a data da noticia (DD/MM/AAAA): ");
+    scanf("%10s", noticia->data);
+
+    printf("Digite o titulo da noticia: ");
+    scanf(" %999[^\n]", noticia->titulo);
+
+    printf("Digite o conteudo da noticia: ");
+    scanf(" %999[^\n]", noticia->conteudo);
+
+    printf("Digite a fonte da noticia: ");
+    scanf(" %999[^\n]", noticia->fonte);
+
+    /*
+     * Classificação forçada como EM_ANALISE.
+     * Notícias recém-cadastradas sempre entram como pendentes;
+     * a reclassificação acontece na opção 6 do menu.
+     */
+    noticia->clasf = EM_ANALISE;
+
+    return noticia;
 }
 
-void imprimirNoticia(Noticia*noticia){
-    if(noticia != NULL){
-        printf("--------------------------------");
-        printf("\n");
-        printf("Id da noticia: %d", noticia->id);
-        printf("\n");
-        printf("Data da noticia: %s", noticia->data);
-        printf("\n");
-        printf("Titulo da noticia: %s", noticia->titulo);
-        printf("\n");
-        printf("fonte da noticia: %s", noticia->fonte);
-        printf("\n");
-
-
-        printf("Classificacao da noticia:" );
-
-        switch (noticia->clasf)
-        {
-            case EM_ANALISE:
-                printf("EM ANÁLISE");
-                break;
-            case CONFIAVEL:
-                printf("CONFIAVEL");
-                break;
-            case SUSPEITA:
-                printf("SUSPEITA");
-                break;    
-            
-            default:
-                printf("DESCONHECIDA");
-                break;
-        }
-        printf("\n");
-        printf("--------------------------------");
-        printf("\n");
-    }else{
-        printf("Não há nenhuma notícia\n");
+/*
+ * imprimirNoticia
+ * Exibe os campos de uma notícia formatados no terminal.
+ */
+void imprimirNoticia(Noticia* noticia) {
+    if (noticia == NULL) {
+        printf("Nenhuma noticia para exibir.\n");
+        return;
     }
-    
+
+    printf("--------------------------------\n");
+    printf("ID       : %d\n",   noticia->id);
+    printf("Data     : %s\n",   noticia->data);
+    printf("Titulo   : %s\n",   noticia->titulo);
+    printf("Fonte    : %s\n",   noticia->fonte);
+    printf("Conteudo : %s\n",   noticia->conteudo);
+    printf("Classif. : ");
+
+    switch (noticia->clasf) {
+        case EM_ANALISE: printf("EM ANALISE\n"); break;
+        case CONFIAVEL:  printf("CONFIAVEL\n");  break;
+        case SUSPEITA:   printf("SUSPEITA\n");   break;
+        default:         printf("DESCONHECIDA\n"); break;
+    }
+
+    printf("--------------------------------\n");
 }
 
-void liberarNoticia(Noticia**noticia){
-    if(noticia != NULL && *noticia != NULL){
+/*
+ * liberarNoticia
+ * Libera a memória apontada por *noticia e zera o ponteiro.
+ */
+void liberarNoticia(Noticia** noticia) {
+    if (noticia != NULL && *noticia != NULL) {
         free(*noticia);
         *noticia = NULL;
     }
-    
 }
